@@ -1,0 +1,16 @@
+---
+- name: My first playbook
+  hosts: all
+  remote_user: test
+  gather_facts: true
+  become: true
+
+  tasks:
+  # так делают только глупые
+  - name: Установить Nginx
+    shell: "apt-get install -y nginx"
+    register: nginx_install
+  
+  - name: Вывести результат установки
+    ansible.builtin.debug:
+      var: nginx_install

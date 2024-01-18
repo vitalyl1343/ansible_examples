@@ -1,0 +1,24 @@
+
+---
+- name: My first playbook
+  hosts: all
+  remote_user: test
+  gather_facts: false 
+  become: true
+
+  tasks:
+    - name: Установить пакет Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      register: nginx_install
+
+    - name: Вывести результат установки
+      ansible.builtin.debug:
+        var: nginx_install
+
+    - name: Проверить статус службы Nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
+      when: nginx_install.changed

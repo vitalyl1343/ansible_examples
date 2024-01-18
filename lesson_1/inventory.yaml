@@ -1,0 +1,15 @@
+all:
+  hosts:
+    database_server1:
+    database_server2:
+
+  vars:
+    example: my_var
+
+  children:
+    db:
+      hosts:
+        database_server1:
+        database_server2:
+      vars:
+        example: my_var

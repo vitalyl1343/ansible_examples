@@ -1,0 +1,17 @@
+
+---
+- name: My first playbook
+  hosts: all
+  remote_user: test
+  gather_facts: true
+
+  tasks:
+  - name: debug
+    debug:
+      var: ansible_hostname
+
+  - ansible.builtin.debug:
+      var: ansible_all_ipv4_addresses
+
+  - ansible.builtin.debug:
+      var: ansible_distribution

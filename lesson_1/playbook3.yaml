@@ -1,0 +1,34 @@
+
+---
+- name: My first playbook
+  hosts: all
+  remote_user: test
+  become: true
+
+  tasks:
+    - name: Проверка дистрибутива
+      ansible.builtin.debug:
+        msg: "Дистрибутив: {{ ansible_distribution }}"
+
+    - name: Установка Nginx на CentOS с использованием yum
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+      when: ansible_distribution == 'CentOS'
+
+    - name: Установка Nginx на Ubuntu с использованием apt
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Установка Nginx на Ubuntu с использованием apt
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+    
+    - name: Remove Nginx package
+      apt:
+        name: nginx
+        state: absent

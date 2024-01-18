@@ -1,0 +1,11 @@
+MY DISTRIB IS {{ ansible_distribution }}
+
+
+
+{% if my_var == 1 %}
+some text here with an actual variable: {{ my_other_var }}
+{% else %}
+some other text here with nothing
+{% endif %}
+
+My var from inventory {{ example }}
