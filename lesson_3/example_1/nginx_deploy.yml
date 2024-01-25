@@ -1,0 +1,23 @@
+---
+- name: Deploy nginx
+  hosts: nginx
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Update repo cache and install  nginx
+      ansible.builtin.apt:
+        name: nginx
+        update_cache: true
+
+    - name: Create and copy nginx.conf
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: '0644'
+      notify: nginx_reload
+
+  handlers:
+    - name: Nginx reload
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

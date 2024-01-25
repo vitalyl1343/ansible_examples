@@ -1,0 +1,32 @@
+---
+- name: Blocks
+  gather_facts: true
+  hosts: all
+
+  tasks:
+    - name: Install, configure, and start Apache
+      block:
+        - name: Install httpd and memcached
+          ansible.builtin.yum:
+            name:
+            - httpd
+            - memcached
+            state: present
+
+        - name: Apply the foo config template
+          ansible.builtin.template:
+            src: templates/src.j2
+            dest: /etc/foo.conf
+      when: ansible_facts['distribution'] == 'Ubuntu'
+      become: false
+      become_user: root
+
+      rescue:
+        - name: Print when errors
+          ansible.builtin.debug:
+            msg: 'I caught an error'
+
+      always:
+        - name: Always do this
+          ansible.builtin.debug:
+            msg: "This always executes, :-)"

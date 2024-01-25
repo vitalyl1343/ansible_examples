@@ -1,0 +1,18 @@
+---
+- name: Create users
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+
+    - name: Ensure group wheel exists
+      ansible.builtin.group:
+        name: wheel
+        state: present
+
+    - name: Add several users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        groups: "wheel"
+      loop: "{{ users }}"

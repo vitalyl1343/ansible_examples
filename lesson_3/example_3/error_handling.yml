@@ -1,0 +1,15 @@
+---
+- name: Error handling
+  hosts: all
+  gather_facts: false
+  ignore_unreachable: true
+  tasks:
+
+  - name: Ignore errors
+    ansible.builtin.shell: /bin/fail
+    ignore_errors: true
+
+  - name: Define my own failure
+    ansible.builtin.command: "echo FAILED"
+    register: command_result
+    failed_when: "'FAILED' in command_result.stderr"

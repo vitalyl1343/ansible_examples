@@ -9,6 +9,7 @@
     - name: Проверка дистрибутива
       ansible.builtin.debug:
         msg: "Дистрибутив: {{ ansible_distribution }}"
+        verbosity: 2
 
     - name: Установка Nginx на CentOS с использованием yum
       ansible.builtin.yum:

@@ -1,0 +1,13 @@
+nginx_workers:
+  #number: 4
+  worker_connection: 10000
+  multi_accept: "on"
+nginx_access_log: /root/access.log
+
+#settings for proxy
+nginx_proxy_port: 12345
+backend:
+  port: 8080
+  start: 10
+  fin: 20
+  except: 12

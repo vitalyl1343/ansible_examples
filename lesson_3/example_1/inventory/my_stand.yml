@@ -1,0 +1,8 @@
+all:
+  children:
+    nginx:
+      hosts:
+        192.168.10.47
+      vars:      
+        ansible_user: test
+        ansible_password: test

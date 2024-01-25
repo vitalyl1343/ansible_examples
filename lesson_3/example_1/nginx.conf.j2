@@ -1,0 +1,65 @@
+user www-data;
+worker_processes {{nginx_workers.number | default(ansible_processor_cores) }};
+pid /run/nginx.pid;
+
+events {
+	worker_connections {{nginx_workers.worker_connection}};
+	multi_accept {{nginx_workers.multi_accept}};
+}
+
+http {
+	server {
+	  listen {{nginx_proxy_port}};
+          
+          location / {
+            proxy_pass http://example_backends;
+	  }
+	} 
+        upstream example_backends {
+          {% for i in range (backend.start,backend.fin+1) %} 
+	    {% if i != backend.except %}
+            server 192.168.0.{{ i }};
+            {% endif %}
+          {% endfor %}
+	}
+
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# Logging Settings
+	##
+
+	access_log {{nginx_access_log}};
+	error_log /var/log/nginx/error.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+	gzip_disable "msie6";
+
+	# gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+	# gzip_buffers 16 8k;
+	# gzip_http_version 1.1;
+        
+        gzip_types application_json;
+
+	# gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+	##
+	# Virtual Host Configs
+	##
+
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+}
